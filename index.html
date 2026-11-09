@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalPulse - Hyper-Local Community & Job Board</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col justify-between">
+
+    <!-- Header / Navbar -->
+    <header class="bg-slate-800 border-b border-slate-700 py-4 px-6 shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-extrabold bg-gradient-to-r from-emerald-400 to-teal-500 bg-clip-text text-transparent flex items-center gap-2">
+                🏙️ LocalPulse
+            </h1>
+            <nav class="hidden md:flex space-x-6 text-sm text-slate-300">
+                <a href="#community" class="hover:text-emerald-400 transition">Community Forum</a>
+                <a href="#jobs" class="hover:text-emerald-400 transition">Micro-Jobs</a>
+                <a href="#housing" class="hover:text-emerald-400 transition">Housing Board</a>
+            </nav>
+            <div class="flex items-center gap-3">
+                <select id="city-selector" class="bg-slate-900 border border-slate-700 text-xs text-slate-300 rounded-lg px-2 py-1.5 focus:outline-none focus:border-emerald-500">
+                    <option value="badin">Badin / Matli</option>
+                    <option value="hyderabad">Hyderabad</option>
+                    <option value="karachi">Karachi</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto w-full px-4 my-6 flex-grow space-y-10">
+        
+        <!-- Hero Banner -->
+        <div class="bg-gradient-to-r from-slate-800 to-slate-800/80 border border-slate-700 rounded-2xl p-8 shadow-xl text-center">
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-3">Your Local Hub, All in One Place</h2>
+            <p class="text-slate-400 max-w-xl mx-auto text-sm mb-6">
+                Connect with neighbors, find micro-gigs, and discover affordable housing in your city.
+            </p>
+        </div>
+
+        <!-- Dashboard Grid Sections -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Section 1: Community Forum -->
+            <section id="community" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-emerald-400 flex items-center gap-2">💬 Community Forum</h3>
+                        <span class="text-xs bg-slate-900 border border-slate-700 px-2 py-1 rounded text-slate-400">Discussions</span>
+                    </div>
+                    <!-- Dynamic Posts Container -->
+                    <div class="space-y-3 mb-6 max-h-80 overflow-y-auto pr-1" id="forum-posts-container">
+                        <!-- Loaded dynamically via JavaScript -->
+                    </div>
+                </div>
+                <button onclick="addNewPost('forum')" class="w-full bg-slate-900 border border-slate-700 hover:border-emerald-500 text-emerald-400 py-2 rounded-xl text-xs font-medium transition">
+                    + Start a Discussion
+                </button>
+            </section>
+
+            <!-- Section 2: Micro-Jobs Board -->
+            <section id="jobs" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-emerald-400 flex items-center gap-2">💼 Micro-Jobs & Gigs</h3>
+                        <span class="text-xs bg-slate-900 border border-slate-700 px-2 py-1 rounded text-slate-400">Local Work</span>
+                    </div>
+                    <!-- Dynamic Jobs Container -->
+                    <div class="space-y-3 mb-6 max-h-80 overflow-y-auto pr-1" id="jobs-posts-container">
+                        <!-- Loaded dynamically via JavaScript -->
+                    </div>
+                </div>
+                <button onclick="addNewPost('job')" class="w-full bg-slate-900 border border-slate-700 hover:border-emerald-500 text-emerald-400 py-2 rounded-xl text-xs font-medium transition">
+                    + Post a Job / Gig
+                </button>
+            </section>
+
+            <!-- Section 3: Housing & Real Estate -->
+            <section id="housing" class="bg-slate-800 border border-slate-700 rounded-2xl p-6 shadow-xl flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-bold text-emerald-400 flex items-center gap-2">🏠 Housing & Rentals</h3>
+                        <span class="text-xs bg-slate-900 border border-slate-700 px-2 py-1 rounded text-slate-400">Real Estate</span>
+                    </div>
+                    <!-- Dynamic Housing Container -->
+                    <div class="space-y-3 mb-6 max-h-80 overflow-y-auto pr-1" id="housing-posts-container">
+                        <!-- Loaded dynamically via JavaScript -->
+                    </div>
+                </div>
+                <button onclick="addNewPost('housing')" class="w-full bg-slate-900 border border-slate-700 hover:border-emerald-500 text-emerald-400 py-2 rounded-xl text-xs font-medium transition">
+                    + List Property
+                </button>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-800 border-t border-slate-700 py-6 text-center text-xs text-slate-400 mt-12">
+        <p>&copy; 2026 LocalPulse. Powered by LocalStorage.</p>
+    </footer>
+
+    <!-- LocalStorage Management Script -->
+    <script>
+        // Initial Default Data if Storage is Empty
+        const defaultData = {
+            forum: [
+                { title: "Best internet service provider in the area?", desc: "Looking for stable fiber options for remote work.", author: "Ali R." },
+                { title: "Community cleanup drive this Sunday", desc: "Gathering near the main park at 8 AM. Volunteers welcome!", author: "Bilal S." }
+            ],
+            jobs: [
+                { title: "Web Developer for Shop Landing Page", desc: "Need a simple HTML/CSS page built within 2 days. Budget: PKR 15,000", tag: "Remote" },
+                { title: "Data Entry Operator Needed", desc: "Excel sheets management for local store. Budget: PKR 12,000/wk", tag: "On-site" }
+            ],
+            housing: [
+                { title: "2-Bed Portion Available for Rent", desc: "Near Main Bazaar, separate entrance. PKR 18,000 / month" },
+                { title: "Single Room for Students / Bachelors", desc: "Furnished room with Wi-Fi included. PKR 8,500 / month" }
+            ]
+        };
+
+        // Load data from LocalStorage or initialize default
+        function getAppData() {
+            const data = localStorage.getItem('cityConnectData');
+            return data ? JSON.parse(data) : defaultData;
+        }
+
+        function saveAppData(data) {
+            localStorage.setItem('cityConnectData', JSON.stringify(data));
+            renderAll();
+        }
+
+        // Render all sections on page load
+        function renderAll() {
+            const data = getAppData();
+
+            // Render Forum
+            const forumContainer = document.getElementById('forum-posts-container');
+            forumContainer.innerHTML = data.forum.map(item => `
+                <div class="bg-slate-900 border border-slate-700 p-3 rounded-xl">
+                    <h4 class="text-sm font-semibold text-white">${item.title}</h4>
+                    <p class="text-xs text-slate-400 mt-1">${item.desc}</p>
+                    <span class="text-[10px] text-slate-500 mt-2 block">By ${item.author || 'Local Resident'}</span>
+                </div>
+            `).join('');
+
+            // Render Jobs
+            const jobsContainer = document.getElementById('jobs-posts-container');
+            jobsContainer.innerHTML = data.jobs.map(item => `
+                <div class="bg-slate-900 border border-slate-700 p-3 rounded-xl flex justify-between items-start">
+                    <div>
+                        <h4 class="text-sm font-semibold text-white">${item.title}</h4>
+                        <p class="text-xs text-slate-400 mt-1">${item.desc}</p>
+                    </div>
+                    <span class="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded border border-emerald-500/20 whitespace-nowrap ml-2">${item.tag || 'Gig'}</span>
+                </div>
+            `).join('');
+
+            // Render Housing
+            const housingContainer = document.getElementById('housing-posts-container');
+            housingContainer.innerHTML = data.housing.map(item => `
+                <div class="bg-slate-900 border border-slate-700 p-3 rounded-xl">
+                    <h4 class="text-sm font-semibold text-white">${item.title}</h4>
+                    <p class="text-xs text-slate-400 mt-1">${item.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        // Add New Dynamic Post via Prompt & Save to LocalStorage
+        function addNewPost(type) {
+            const title = prompt("Enter Title/Heading:");
+            if (!title) return;
+            const desc = prompt("Enter Description/Details:");
+            if (!desc) return;
+
+            const data = getAppData();
+
+            if (type === 'forum') {
+                data.forum.unshift({ title, desc, author: "You" });
+            } else if (type === 'job') {
+                const tag = prompt("Enter Tag (e.g., Remote / On-site):", "Local");
+                data.jobs.unshift({ title, desc, tag });
+            } else if (type === 'housing') {
+                data.housing.unshift({ title, desc });
+            }
+
+            saveAppData(data);
+            alert("Successfully added and saved locally!");
+        }
+
+        // Run render on initial load
+        window.onload = renderAll;
+    </script>
+</body>
+<script>
+  atOptions = {
+    'key' : '47f59d3295dd4dee55c530d2e06daea4',
+    'format' : 'iframe',
+    'height' : 60,
+    'width' : 468,
+    'params' : {}
+  };
+</script>
+<script src="https://bicea.org/22/47f59d3295dd4dee55c530d2e06daea4"></script>
+</html>
